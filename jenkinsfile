@@ -15,5 +15,15 @@ pipeline {
                 bat 'docker build -t devops-cicd-app .'
             }
         }
+        stage('Test'){
+            steps {
+                bat'docker run -d --name test-container -p 8082:80 devops-cicd-app'
+                bat 'powershell -Command "try { $response = Invoke-WebRequest -Uri http://localhost:8082 -UseBasicParsing; if ($response.StatusCode -ne 200) { exit 1 } } catch { exit 1 }"'
+                bat 'docker stop test-container'
+                bat 'docker rm test-container'
+                }
+
+            }
+        }
     }
 }
