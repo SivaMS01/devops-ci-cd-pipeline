@@ -33,6 +33,7 @@ pipeline {
                          variable: 'EC2_KEY'
                         )
                      ]) {
+                        bat 'whoami'
                         bat 'icacls "%EC2_KEY%" /inheritance:r'
                         bat 'icacls "%EC2_KEY%" /grant:r "NT AUTHORITY\\SYSTEM:R"'
                         bat '''
