@@ -34,7 +34,7 @@ pipeline {
                         )
                      ]) {
                         bat 'icacls "%EC2_KEY%" /inheritance:r'
-                        bat 'icacls "%EC2_KEY%" /grant:r "NT AUTHORITY\SYSTEM:R"'
+                        bat 'icacls "%EC2_KEY%" /grant:r "NT AUTHORITY\\SYSTEM:R"'
                         bat '''
                              ssh -o StrictHostKeyChecking=no -i "%EC2_KEY%" ec2-user@3.106.130.132 "cd devops-ci-cd-pipeline && git pull && sudo docker build -t devops-cicd-app . && (sudo docker rm -f devops-cicd-app || true) && sudo docker run -d --name devops-cicd-app -p 80:80 devops-cicd-app"
                             '''
