@@ -24,6 +24,21 @@ pipeline {
                 }
 
             }
-        }
-    }
+            
+        stage('Deploy to EC2') {
+             steps {
+                 withCredentials([
+                     file(
+                        credentialsId: 'ec2-deploy-key',
+                         variable: 'EC2_KEY'
+                        )
+                     ]) {
+                        bat '''
+                             ssh -o StrictHostKeyChecking=no -i "%EC2_KEY%" ec2-user@3.106.130.132 "cd devops-ci-cd-pipeline && git pull && sudo docker build -t devops-cicd-app . && (sudo docker rm -f devops-cicd-app || true) && sudo docker run -d --name devops-cicd-app -p 80:80 devops-cicd-app"
+                            '''
+                    }
+                }
 
+            }
+    }
+}
